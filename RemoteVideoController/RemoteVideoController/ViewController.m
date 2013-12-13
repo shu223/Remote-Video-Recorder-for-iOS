@@ -30,7 +30,7 @@ static NSString * const kMessageKey = @"message";
     
     // start advertising
     
-    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Helicopter #1"];
+    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Advertiser #1"];
     _session = [[MCSession alloc] initWithPeer:_peerID];
     _session.delegate = self;
     _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:kServiceName
