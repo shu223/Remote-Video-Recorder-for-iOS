@@ -58,11 +58,18 @@
                                     <action selector="launchBrowserTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="lCu-g8-chM"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRs-VM-cMd">
+                                <rect key="frame" x="0.0" y="318" width="320" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="launchBrowserButton" destination="8Xo-cX-l9g" id="lV7-iw-2HR"/>
+                        <outlet property="messageLabel" destination="QRs-VM-cMd" id="N3Q-fS-6aQ"/>
                         <outlet property="retakeBtn" destination="ClH-uw-pSE" id="ZG5-e3-w7g"/>
                         <outlet property="startBtn" destination="nsN-Ty-3gu" id="eRH-5J-VpR"/>
                         <outlet property="stopBtn" destination="g59-6K-9sb" id="j3s-OW-YEk"/>

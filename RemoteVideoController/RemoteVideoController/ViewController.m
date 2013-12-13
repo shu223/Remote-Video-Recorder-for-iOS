@@ -21,6 +21,7 @@
 @property (nonatomic, weak) IBOutlet UIButton *startBtn;
 @property (nonatomic, weak) IBOutlet UIButton *retakeBtn;
 @property (nonatomic, weak) IBOutlet UIButton *stopBtn;
+@property (nonatomic, weak) IBOutlet UILabel *messageLabel;
 @end
 
 
@@ -106,14 +107,11 @@
                                                                             format:&format
                                                                              error:NULL];
     NSString *message = receivedData[kMessageKey];
+
     if ([message length]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"Received message"
-                                                                   message:message
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"OK"
-                                                         otherButtonTitles:nil];
-            [messageAlert show];
+
+            self.messageLabel.text = message;
         });
     }
 }

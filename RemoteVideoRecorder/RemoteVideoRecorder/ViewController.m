@@ -60,10 +60,32 @@
 // =============================================================================
 #pragma mark - Private
 
-- (void) updateLabelForSecond:(Float64)totalRecorded {
+- (void)updateLabelForSecond:(Float64)totalRecorded {
     
-    self.timeRecordedLabel.text = [NSString stringWithFormat:@"Recorded - %.2f sec",
+    self.timeRecordedLabel.text = [NSString stringWithFormat:@"Recording: %.2f sec",
                                    totalRecorded];
+    
+    [self sendMessage:self.timeRecordedLabel.text];
+}
+
+- (void)sendMessage:(NSString *)message {
+
+    NSDictionary *dataDict = @{ kMessageKey : message };
+    
+    [self sendDataWithPropertyList:dataDict];
+}
+
+- (void)sendDataWithPropertyList:(NSDictionary *)propertyList {
+
+    NSData *data = [NSPropertyListSerialization dataWithPropertyList:propertyList
+                                                              format:NSPropertyListBinaryFormat_v1_0
+                                                             options:0
+                                                               error:NULL];
+    NSError *error;
+    [self.session sendData:data
+                   toPeers:[_session connectedPeers]
+                  withMode:MCSessionSendDataReliable
+                     error:&error];
 }
 
 - (void) prepareCamera {
