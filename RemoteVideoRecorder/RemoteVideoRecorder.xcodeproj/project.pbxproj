@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A697D16185B8244008E0085 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8A697D13185B8244008E0085 /* SVProgressHUD.bundle */; };
+		8A697D17185B8244008E0085 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A697D15185B8244008E0085 /* SVProgressHUD.m */; };
 		8AD89196185B2E9300019D88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89195185B2E9300019D88 /* Foundation.framework */; };
 		8AD89198185B2E9300019D88 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89197185B2E9300019D88 /* CoreGraphics.framework */; };
 		8AD8919A185B2E9300019D88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89199185B2E9300019D88 /* UIKit.framework */; };
@@ -43,6 +45,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8A697D12185B8244008E0085 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		8A697D13185B8244008E0085 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		8A697D14185B8244008E0085 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		8A697D15185B8244008E0085 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		8AD89192185B2E9200019D88 /* RemoteVideoRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteVideoRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD89195185B2E9300019D88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AD89197185B2E9300019D88 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -109,6 +115,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A697D11185B8244008E0085 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				8A697D12185B8244008E0085 /* SVProgressHUD-Prefix.pch */,
+				8A697D13185B8244008E0085 /* SVProgressHUD.bundle */,
+				8A697D14185B8244008E0085 /* SVProgressHUD.h */,
+				8A697D15185B8244008E0085 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		8AD89189185B2E9200019D88 = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +204,7 @@
 		8AD891CA185B39B200019D88 /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				8A697D11185B8244008E0085 /* SVProgressHUD */,
 				8AD891CB185B39B200019D88 /* SCAudioVideoRecorder */,
 			);
 			path = vendor;
@@ -307,6 +325,7 @@
 				8AD891AE185B2E9300019D88 /* Images.xcassets in Resources */,
 				8AD891A0185B2E9300019D88 /* InfoPlist.strings in Resources */,
 				8AD891A9185B2E9300019D88 /* Main.storyboard in Resources */,
+				8A697D16185B8244008E0085 /* SVProgressHUD.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +353,7 @@
 				8AD891E6185B39B200019D88 /* SCCamera.m in Sources */,
 				8AD891E9185B39B200019D88 /* SCVideoEncoder.m in Sources */,
 				8AD891E8185B39B200019D88 /* SCPlayer.m in Sources */,
+				8A697D17185B8244008E0085 /* SVProgressHUD.m in Sources */,
 				8AD891E3185B39B200019D88 /* SCAudioEncoder.m in Sources */,
 				8AD891A2185B2E9300019D88 /* main.m in Sources */,
 				8AD891E5185B39B200019D88 /* SCAudioVideoRecorder.m in Sources */,

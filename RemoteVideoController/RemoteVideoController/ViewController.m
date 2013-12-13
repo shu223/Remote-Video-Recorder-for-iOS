@@ -16,7 +16,11 @@
 @property (nonatomic, strong) MCPeerID *peerID;
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCBrowserViewController *browserView;
+
 @property (nonatomic, weak) IBOutlet UIButton *launchBrowserButton;
+@property (nonatomic, weak) IBOutlet UIButton *startBtn;
+@property (nonatomic, weak) IBOutlet UIButton *retakeBtn;
+@property (nonatomic, weak) IBOutlet UIButton *stopBtn;
 @end
 
 
@@ -26,6 +30,7 @@
 {
     [super viewDidLoad];
     
+    [self setControlButtonsEnabled:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -34,6 +39,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+// =============================================================================
+#pragma mark - Private
+
+- (void)setControlButtonsEnabled:(BOOL)enabled {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.startBtn.enabled = enabled;
+        self.retakeBtn.enabled = enabled;
+        self.stopBtn.enabled = enabled;
+        self.launchBrowserButton.hidden = enabled;
+    });
+}
 
 
 // =============================================================================
@@ -68,6 +87,15 @@
         }
         default:
             break;
+    }
+    
+    if ([self.session.connectedPeers count]) {
+        
+        [self setControlButtonsEnabled:YES];
+    }
+    else {
+        
+        [self setControlButtonsEnabled:NO];
     }
 }
 

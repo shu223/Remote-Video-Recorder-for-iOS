@@ -12,6 +12,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import "RVConstants.h"
+#import "SVProgressHUD.h"
 
 
 @interface ViewController ()
@@ -24,6 +25,7 @@
 
 @property (nonatomic, weak) IBOutlet UIView *previewView;
 @property (nonatomic, weak) IBOutlet UILabel *timeRecordedLabel;
+@property (nonatomic, weak) IBOutlet UIButton *advertiseBtn;
 @end
 
 
@@ -90,18 +92,6 @@
 	}
 }
 
-- (void)startAdvertising {
-
-    // start advertising
-    
-    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Advertiser #1"];
-    _session = [[MCSession alloc] initWithPeer:_peerID];
-    _session.delegate = self;
-    _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:kServiceName
-                                                                discoveryInfo:nil
-                                                                      session:_session];
-    [_advertiserAssistant start];
-}
 
 
 // =============================================================================
@@ -126,44 +116,59 @@
 }
 
 - (void) audioVideoRecorder:(SCAudioVideoRecorder *)audioVideoRecorder didFinishRecordingAtUrl:(NSURL *)recordedFile error:(NSError *)error {
-	
+
+    [self prepareCamera];
+    
+    if (error) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failed to record"
+                                                        message:[error localizedDescription]
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+
+        return;
+    }
+
+    
+    // save to camera roll
+    [SVProgressHUD showWithStatus:@"Saving..."
+                         maskType:SVProgressHUDMaskTypeGradient];
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         
-        // save in background
         ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
         [assetLibrary writeVideoAtPathToSavedPhotosAlbum:recordedFile
-                                         completionBlock:^(NSURL *assetURL, NSError *error) {
-                                             DLog(@"Saved video to the camera roll.");
-                                         }];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self prepareCamera];
-//            self.loadingView.hidden = YES;
-//            self.downBar.userInteractionEnabled = YES;
-            
-            NSString *title;
-            NSString *message;
-            
-            if (error != nil) {
-            
-                title = @"Failed to save video";
-                message = [error localizedDescription];
-            }
-            else {
-                title = @"Saved!";
-                message = nil;
-            }
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        });
+                                         completionBlock:
+         ^(NSURL *assetURL, NSError *error) {
+             
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 
+                 [SVProgressHUD dismiss];
+                 
+                 NSString *title;
+                 NSString *message;
+                 
+                 if (error != nil) {
+                     
+                     title = @"Failed to save video";
+                     message = [error localizedDescription];
+                 }
+                 else {
+                     title = @"Saved!";
+                     message = nil;
+                 }
+                 
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                                 message:message
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil];
+                 [alert show];
+             });
+         }];
     });
 }
 
@@ -193,6 +198,15 @@
         default:
             break;
     }
+    
+    // 接続が切れたらstart advertiseボタンを再度出す
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (![self.session.connectedPeers count]) {
+            
+            self.advertiseBtn.hidden = NO;
+        }
+    });
 }
 
 // リモコンからの信号受信
@@ -260,8 +274,8 @@
     
     if ([self.camera isRecording]) {
         
-        NSLog(@"==== PAUSING RECORDING ====");
-        [self.camera pause];
+//        NSLog(@"==== PAUSING RECORDING ====");
+//        [self.camera pause];
     }
     else {
         
@@ -280,6 +294,19 @@
     [self.camera cancel];
 	[self prepareCamera];
     [self updateLabelForSecond:0];
+}
+
+- (IBAction)startAdvertising {
+    
+    self.advertiseBtn.hidden = YES;
+    
+    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Advertiser #1"];
+    _session = [[MCSession alloc] initWithPeer:_peerID];
+    _session.delegate = self;
+    _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:kServiceName
+                                                                discoveryInfo:nil
+                                                                      session:_session];
+    [_advertiserAssistant start];
 }
 
 @end
