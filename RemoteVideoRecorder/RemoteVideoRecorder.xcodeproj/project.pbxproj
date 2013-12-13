@@ -30,7 +30,6 @@
 		8AD891E8185B39B200019D88 /* SCPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD891DB185B39B200019D88 /* SCPlayer.m */; };
 		8AD891E9185B39B200019D88 /* SCVideoEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD891DD185B39B200019D88 /* SCVideoEncoder.m */; };
 		8AD891EA185B39B200019D88 /* SCVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD891DF185B39B200019D88 /* SCVideoPlayerView.m */; };
-		8AD891EB185B39B200019D88 /* SCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD891E1185B39B200019D88 /* SCViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,8 +82,6 @@
 		8AD891DD185B39B200019D88 /* SCVideoEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoEncoder.m; sourceTree = "<group>"; };
 		8AD891DE185B39B200019D88 /* SCVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCVideoPlayerView.h; sourceTree = "<group>"; };
 		8AD891DF185B39B200019D88 /* SCVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoPlayerView.m; sourceTree = "<group>"; };
-		8AD891E0185B39B200019D88 /* SCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCViewController.h; sourceTree = "<group>"; };
-		8AD891E1185B39B200019D88 /* SCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCViewController.m; sourceTree = "<group>"; };
 		8AEEB90D185B708E00DCE862 /* RVConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RVConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -218,8 +215,6 @@
 				8AD891DD185B39B200019D88 /* SCVideoEncoder.m */,
 				8AD891DE185B39B200019D88 /* SCVideoPlayerView.h */,
 				8AD891DF185B39B200019D88 /* SCVideoPlayerView.m */,
-				8AD891E0185B39B200019D88 /* SCViewController.h */,
-				8AD891E1185B39B200019D88 /* SCViewController.m */,
 			);
 			path = SCAudioVideoRecorder;
 			sourceTree = "<group>";
@@ -333,7 +328,6 @@
 				8AD891E2185B39B200019D88 /* NSArray+SCAdditions.m in Sources */,
 				8AD891AC185B2E9300019D88 /* ViewController.m in Sources */,
 				8AD891E7185B39B200019D88 /* SCDataEncoder.m in Sources */,
-				8AD891EB185B39B200019D88 /* SCViewController.m in Sources */,
 				8AD891EA185B39B200019D88 /* SCVideoPlayerView.m in Sources */,
 				8AD891E4185B39B200019D88 /* SCAudioTools.m in Sources */,
 				8AD891A6185B2E9300019D88 /* AppDelegate.m in Sources */,

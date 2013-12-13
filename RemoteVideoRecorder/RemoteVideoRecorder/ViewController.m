@@ -15,16 +15,15 @@
 
 
 @interface ViewController ()
-<SCCameraDelegate, MCBrowserViewControllerDelegate, MCSessionDelegate>
+<SCCameraDelegate, MCSessionDelegate>
 @property (nonatomic, strong) SCCamera *camera;
 
 @property (nonatomic, strong) MCPeerID *peerID;
 @property (nonatomic, strong) MCSession *session;
-@property (nonatomic, strong) MCBrowserViewController *browserView;
+@property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
 
 @property (nonatomic, weak) IBOutlet UIView *previewView;
 @property (nonatomic, weak) IBOutlet UILabel *timeRecordedLabel;
-@property (nonatomic, weak) IBOutlet UIButton *launchBrowserButton;
 @end
 
 
@@ -45,32 +44,14 @@
     [self.camera initialize:^(NSError * audioError, NSError * videoError) {
 		[self prepareCamera];
     }];
+    
+    
+    [self startAdvertising];
 }
-
-//- (void)viewDidAppear:(BOOL)animated {
-//    
-//    [super viewDidAppear:animated];
-//
-//	if (self.camera.isReady && ![self.camera.session isRunning]) {
-//		NSLog(@"Start running");
-//		[self.camera startRunningSession];
-//	} else {
-//		NSLog(@"Not prepared yet");
-//	}
-//}
-//
-//- (void)viewDidDisappear:(BOOL)animated {
-//    
-//	[super viewDidDisappear:animated];
-//	
-//    [self.camera stopRunningSession];
-//	[self.camera cancel];
-//}
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
@@ -79,7 +60,8 @@
 
 - (void) updateLabelForSecond:(Float64)totalRecorded {
     
-    self.timeRecordedLabel.text = [NSString stringWithFormat:@"Recorded - %.2f sec", totalRecorded];
+    self.timeRecordedLabel.text = [NSString stringWithFormat:@"Recorded - %.2f sec",
+                                   totalRecorded];
 }
 
 - (void) prepareCamera {
@@ -106,6 +88,19 @@
             [self.camera startRunningSession];
 		}
 	}
+}
+
+- (void)startAdvertising {
+
+    // start advertising
+    
+    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Advertiser #1"];
+    _session = [[MCSession alloc] initWithPeer:_peerID];
+    _session.delegate = self;
+    _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:kServiceName
+                                                                discoveryInfo:nil
+                                                                      session:_session];
+    [_advertiserAssistant start];
 }
 
 
@@ -179,23 +174,6 @@
 
 
 // =============================================================================
-#pragma mark - MCBrowserViewControllerDelegate
-
-- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_browserView.browser stopBrowsingForPeers];
-    }];
-}
-
-- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_browserView.browser stopBrowsingForPeers];
-        _launchBrowserButton.hidden = NO;
-    }];
-}
-
-
-// =============================================================================
 #pragma mark - MCSessionDelegate
 
 // MCSessionDelegate methods are called on a background queue, if you are going to update UI
@@ -204,20 +182,12 @@
 - (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state {
     switch (state) {
         case MCSessionStateConnected: {
-            dispatch_async(dispatch_get_main_queue(), ^{
-//                _messageTextField.hidden = NO;
-//                _sendMessageButton.hidden = NO;
-//                _activityView.hidden = YES;
-            });
-
+            NSLog(@"MCSessionStateConnected");
+            [_advertiserAssistant stop];
             break;
         }
         case MCSessionStateNotConnected: {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _launchBrowserButton.hidden = NO;
-//                _messageTextField.hidden = YES;
-//                _sendMessageButton.hidden = YES;
-            });
+            NSLog(@"MCSessionStateNotConnected");
             break;
         }
         default:
@@ -237,12 +207,6 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             NSLog(@"Received message: %@", message);
-//            UIAlertView *messageAlert = [[UIAlertView alloc] initWithTitle:@"Received message"
-//                                                                   message:message
-//                                                                  delegate:self
-//                                                         cancelButtonTitle:@"OK"
-//                                                         otherButtonTitles:nil];
-//            [messageAlert show];
             
             // START
             if ([message isEqualToString:kCommandStart]) {
@@ -316,19 +280,6 @@
     [self.camera cancel];
 	[self prepareCamera];
     [self updateLabelForSecond:0];
-}
-
-- (IBAction)launchBrowserTapped {
-    
-    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Browser Name"];
-    _session = [[MCSession alloc] initWithPeer:_peerID];
-    _session.delegate = self;
-    _browserView = [[MCBrowserViewController alloc] initWithServiceType:kServiceName
-                                                                session:_session];
-    _browserView.delegate = self;
-    [self presentViewController:_browserView animated:YES completion:nil];
-
-    _launchBrowserButton.hidden = YES;
 }
 
 @end

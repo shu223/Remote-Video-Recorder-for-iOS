@@ -31,17 +31,6 @@
                                             <action selector="startButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XA3-z7-lKd"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="80V-sv-cz6">
-                                        <rect key="frame" x="33" y="474" width="125" height="33"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Launch Browser">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="launchBrowserTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="OvL-h6-7d1"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3pf-Lv-7u9">
                                         <rect key="frame" x="93" y="515" width="65" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -78,7 +67,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="launchBrowserButton" destination="80V-sv-cz6" id="rT1-6P-ygW"/>
                         <outlet property="previewView" destination="WKU-ec-k75" id="KaX-SS-0Qa"/>
                         <outlet property="timeRecordedLabel" destination="3uo-g5-sow" id="gjl-oh-2Nm"/>
                     </connections>

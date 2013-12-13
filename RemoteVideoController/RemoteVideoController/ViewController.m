@@ -12,10 +12,11 @@
 
 
 @interface ViewController ()
-<MCSessionDelegate>
+<MCSessionDelegate, MCBrowserViewControllerDelegate>
 @property (nonatomic, strong) MCPeerID *peerID;
 @property (nonatomic, strong) MCSession *session;
-@property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
+@property (nonatomic, strong) MCBrowserViewController *browserView;
+@property (nonatomic, weak) IBOutlet UIButton *launchBrowserButton;
 @end
 
 
@@ -25,21 +26,30 @@
 {
     [super viewDidLoad];
     
-    // start advertising
-    
-    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Advertiser #1"];
-    _session = [[MCSession alloc] initWithPeer:_peerID];
-    _session.delegate = self;
-    _advertiserAssistant = [[MCAdvertiserAssistant alloc] initWithServiceType:kServiceName
-                                                                discoveryInfo:nil
-                                                                      session:_session];
-    [_advertiserAssistant start];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+
+// =============================================================================
+#pragma mark - MCBrowserViewControllerDelegate
+
+- (void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController {
+    [self dismissViewControllerAnimated:YES completion:^{
+        [_browserView.browser stopBrowsingForPeers];
+    }];
+}
+
+- (void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController {
+    [self dismissViewControllerAnimated:YES completion:^{
+        [_browserView.browser stopBrowsingForPeers];
+        _launchBrowserButton.hidden = NO;
+    }];
 }
 
 
@@ -50,25 +60,10 @@
     switch (state) {
         case MCSessionStateConnected: {
             NSLog(@"MCSessionStateConnected");
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                _messageTextField.hidden = NO;
-//                _sendMessageButton.hidden = NO;
-//                _activityView.hidden = YES;
-//            });
-            
-            // This line only necessary for the advertiser. We want to stop advertising our services
-            // to other browsers when we successfully connect to one.
-            [_advertiserAssistant stop];
             break;
         }
         case MCSessionStateNotConnected: {
             NSLog(@"MCSessionStateNotConnected");
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                _launchAdvertiserButton.hidden = NO;
-//                _launchBrowserButton.hidden = NO;
-//                _messageTextField.hidden = YES;
-//                _sendMessageButton.hidden = YES;
-//            });
             break;
         }
         default:
@@ -153,5 +148,17 @@
                      error:&error];
 }
 
+- (IBAction)launchBrowserTapped {
+    
+    _peerID = [[MCPeerID alloc] initWithDisplayName:@"Browser Name"];
+    _session = [[MCSession alloc] initWithPeer:_peerID];
+    _session.delegate = self;
+    _browserView = [[MCBrowserViewController alloc] initWithServiceType:kServiceName
+                                                                session:_session];
+    _browserView.delegate = self;
+    [self presentViewController:_browserView animated:YES completion:nil];
+    
+    _launchBrowserButton.hidden = YES;
+}
 
 @end
