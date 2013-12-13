@@ -820,6 +820,8 @@ typedef NSView View;
 
     AVCaptureDevice *cameraBack =[self videoDeviceWithPosition:(AVCaptureDevicePosition)self.cameraDevice];
     
+    [self.session beginConfiguration];
+
     if ([cameraBack lockForConfiguration:nil])
     {
         NSLog(@"lockForConfiguration...");
@@ -854,6 +856,8 @@ typedef NSView View;
         AVCaptureDeviceFormat *bestFormat = nil;
         AVFrameRateRange *bestFrameRateRange = nil;
         
+        NSLog(@"all formats:%@", [cameraBack formats]);
+        
         for ( AVCaptureDeviceFormat *format in [cameraBack formats] )
         {
             for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges )
@@ -875,6 +879,7 @@ typedef NSView View;
         [cameraBack unlockForConfiguration];
         NSLog(@"unlockForConfiguration!");
     }
+    [self.session commitConfiguration];
 }
 // < ADDED
 

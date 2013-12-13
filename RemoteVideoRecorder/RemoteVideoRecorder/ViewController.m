@@ -43,9 +43,6 @@
 	self.camera.videoOrientation = AVCaptureVideoOrientationPortrait;
 //	self.camera.recordingDurationLimit = CMTimeMakeWithSeconds(10, 1);
     
-    // このメソッドで120fpsにしてるつもり。なってないっぽい？
-    [self.camera setBestFormat];
-    
     [self.camera initialize:^(NSError * audioError, NSError * videoError) {
 		[self prepareCamera];
     }];
@@ -111,6 +108,11 @@
 		}
         else {
             
+            // このメソッドで120fpsにしてるつもり。なってないっぽい？
+            [self.camera setBestFormat];
+            
+            AVCaptureDevice *device = [self.camera videoDeviceWithPosition:AVCaptureDevicePositionBack];
+            NSLog(@"format:%@", device.activeFormat);
 			NSLog(@"- CAMERA READY -");
             [self.camera startRunningSession];
 		}

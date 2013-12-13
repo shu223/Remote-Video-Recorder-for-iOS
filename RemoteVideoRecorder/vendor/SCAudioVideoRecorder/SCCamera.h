@@ -105,6 +105,7 @@ typedef enum {
 
 // > ADDED
 - (void)setBestFormat;
+- (AVCaptureDevice*) videoDeviceWithPosition:(AVCaptureDevicePosition)position;
 // < ADDED
 
 #else
