@@ -8,10 +8,7 @@
 
 #import "ViewController.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-
-
-static NSString * const kServiceName = @"multipeer";
-static NSString * const kMessageKey = @"message";
+#import "RVConstants.h"
 
 
 @interface ViewController ()
@@ -134,13 +131,13 @@ static NSString * const kMessageKey = @"message";
             message = @"unknown";
             break;
         case 1:
-            message = @"start";
+            message = kCommandStart;
             break;
         case 2:
-            message = @"retake";
+            message = kCommandRetake;
             break;
         case 3:
-            message = @"stop";
+            message = kCommandStop;
             break;
     }
     

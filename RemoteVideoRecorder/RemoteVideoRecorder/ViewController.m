@@ -11,10 +11,7 @@
 #import "SCCamera.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-
-
-static NSString * const kServiceName    = @"multipeer";
-static NSString * const kMessageKey     = @"message";
+#import "RVConstants.h"
 
 
 @interface ViewController ()
@@ -248,17 +245,17 @@ static NSString * const kMessageKey     = @"message";
 //            [messageAlert show];
             
             // START
-            if ([message isEqualToString:@"start"]) {
+            if ([message isEqualToString:kCommandStart]) {
                 
                 [self startButtonTapped:nil];
             }
             // RETAKE
-            else if ([message isEqualToString:@"retake"]) {
+            else if ([message isEqualToString:kCommandRetake]) {
                 
                 [self retakeButtonTapped:nil];
             }
             // STOP
-            else if ([message isEqualToString:@"stop"]) {
+            else if ([message isEqualToString:kCommandStop]) {
                 
                 [self stopButtonTapped:nil];
             }

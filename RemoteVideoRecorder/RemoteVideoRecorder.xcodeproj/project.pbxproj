@@ -85,6 +85,7 @@
 		8AD891DF185B39B200019D88 /* SCVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoPlayerView.m; sourceTree = "<group>"; };
 		8AD891E0185B39B200019D88 /* SCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCViewController.h; sourceTree = "<group>"; };
 		8AD891E1185B39B200019D88 /* SCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCViewController.m; sourceTree = "<group>"; };
+		8AEEB90D185B708E00DCE862 /* RVConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RVConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +115,7 @@
 		8AD89189185B2E9200019D88 = {
 			isa = PBXGroup;
 			children = (
+				8AEEB90C185B708E00DCE862 /* Common */,
 				8AD891CA185B39B200019D88 /* vendor */,
 				8AD8919B185B2E9300019D88 /* RemoteVideoRecorder */,
 				8AD891BA185B2E9300019D88 /* RemoteVideoRecorderTests */,
@@ -220,6 +222,15 @@
 				8AD891E1185B39B200019D88 /* SCViewController.m */,
 			);
 			path = SCAudioVideoRecorder;
+			sourceTree = "<group>";
+		};
+		8AEEB90C185B708E00DCE862 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8AEEB90D185B708E00DCE862 /* RVConstants.h */,
+			);
+			name = Common;
+			path = ../Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -53,6 +53,7 @@
 		8AD892A7185B615F00019D88 /* RemoteVideoControllerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RemoteVideoControllerTests-Info.plist"; sourceTree = "<group>"; };
 		8AD892A9185B615F00019D88 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8AD892AB185B615F00019D88 /* RemoteVideoControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemoteVideoControllerTests.m; sourceTree = "<group>"; };
+		8AEEB90F185B709400DCE862 /* RVConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RVConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +83,7 @@
 		8AD89274185B615F00019D88 = {
 			isa = PBXGroup;
 			children = (
+				8AEEB90E185B709400DCE862 /* Common */,
 				8AD89286185B615F00019D88 /* RemoteVideoController */,
 				8AD892A5185B615F00019D88 /* RemoteVideoControllerTests */,
 				8AD8927F185B615F00019D88 /* Frameworks */,
@@ -150,6 +152,15 @@
 				8AD892A8185B615F00019D88 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8AEEB90E185B709400DCE862 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8AEEB90F185B709400DCE862 /* RVConstants.h */,
+			);
+			name = Common;
+			path = ../Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -460,6 +471,7 @@
 				8AD892B1185B615F00019D88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8AD892B2185B615F00019D88 /* Build configuration list for PBXNativeTarget "RemoteVideoControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -468,6 +480,7 @@
 				8AD892B4185B615F00019D88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
