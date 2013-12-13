@@ -176,6 +176,7 @@ typedef NSView View;
             NSError * audioError;
             self.currentAudioDeviceInput = [self addInputToSession:captureSession device:[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio]
  withMediaType:@"Audio" error:&audioError];
+            
             if (!self.enableSound) {
                 audioError = nil;
             }
@@ -586,12 +587,14 @@ typedef NSView View;
 
 - (void)_sessionStarted:(NSNotification *)notification
 {
+    __weak SCCamera *weakSelf = self;
+    
     [self dispatchBlockOnAskedQueue:^{
         if ([notification object] == session) {
-            DLog(@"session was started");
+            NSLog(@"session was started");
             
-            if ([self.delegate respondsToSelector:@selector(cameraSessionDidStart:)]) {
-                [self.delegate cameraSessionDidStart:self];
+            if ([weakSelf.delegate respondsToSelector:@selector(cameraSessionDidStart:)]) {
+                [weakSelf.delegate cameraSessionDidStart:weakSelf];
             }
         }
     }];
@@ -612,7 +615,7 @@ typedef NSView View;
 {
     [self dispatchBlockOnAskedQueue:^{
         if ([notification object] == session) {
-            DLog(@"session was interrupted");
+            NSLog(@"session was interrupted");
             // notify stop?
         }
     }];
@@ -810,6 +813,71 @@ typedef NSView View;
 	
 	return focusString;
 }
+
+// > ADDED
+// http://pastebin.com/PbR7GV7p
+- (void)setBestFormat {
+
+    AVCaptureDevice *cameraBack =[self videoDeviceWithPosition:(AVCaptureDevicePosition)self.cameraDevice];
+    
+    if ([cameraBack lockForConfiguration:nil])
+    {
+        NSLog(@"lockForConfiguration...");
+//        // No autofocus
+//        if ( [cameraBack isFocusModeSupported:AVCaptureFocusModeLocked])
+//        {
+//            cameraBack.focusMode = AVCaptureFocusModeLocked;
+//            
+//        }
+//        // Focus center image always
+//        if ( [cameraBack isFocusPointOfInterestSupported])
+//        {
+//            cameraBack.focusPointOfInterest = CGPointMake(0.5, 0.5);
+//        }
+//        // Autoexpose color is have a several change of lights
+//        if ( [cameraBack isExposurePointOfInterestSupported] )
+//        {
+//            cameraBack.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+//        }
+//        // Auto adjust white balance is user aim to a reflectant surface
+//        if ( [cameraBack isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance])
+//        {
+//            cameraBack.whiteBalanceMode = AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance;
+//        }
+//        // Only Focus far
+//        if ( [cameraBack isAutoFocusRangeRestrictionSupported])
+//        {
+//            cameraBack.autoFocusRangeRestriction = AVCaptureAutoFocusRangeRestrictionFar;
+//        }
+        
+        // Choose best rate depending preset
+        AVCaptureDeviceFormat *bestFormat = nil;
+        AVFrameRateRange *bestFrameRateRange = nil;
+        
+        for ( AVCaptureDeviceFormat *format in [cameraBack formats] )
+        {
+            for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges )
+            {
+                if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate )
+                {
+                    bestFormat = format;
+                    bestFrameRateRange = range;
+                }
+            }
+        }
+        if (bestFormat)
+        {
+            cameraBack.activeFormat = bestFormat;
+            cameraBack.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+            cameraBack.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
+            NSLog(@"activeFormat:%@", cameraBack.activeFormat);
+        }
+        [cameraBack unlockForConfiguration];
+        NSLog(@"unlockForConfiguration!");
+    }
+}
+// < ADDED
+
 
 #pragma mark - KVO
 

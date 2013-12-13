@@ -42,7 +42,10 @@
     self.camera.previewView = self.previewView;
 	self.camera.videoOrientation = AVCaptureVideoOrientationPortrait;
 //	self.camera.recordingDurationLimit = CMTimeMakeWithSeconds(10, 1);
-
+    
+    // このメソッドで120fpsにしてるつもり。なってないっぽい？
+    [self.camera setBestFormat];
+    
     [self.camera initialize:^(NSError * audioError, NSError * videoError) {
 		[self prepareCamera];
     }];

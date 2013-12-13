@@ -103,6 +103,10 @@ typedef enum {
 @property (weak, nonatomic) UIView * previewView;
 @property (nonatomic, readonly) CGRect cleanAperture;
 
+// > ADDED
+- (void)setBestFormat;
+// < ADDED
+
 #else
 
 @property (weak, nonatomic) NSView * previewView;
