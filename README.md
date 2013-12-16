@@ -13,9 +13,10 @@
 - 撮影側にRemoteVideoRecorderの方をインストール
 
 
-###2. リモコン側のLaunch Browserをタップ
+###2. BLE接続
 
-- Advertiser #1と出てくるので、そこをタップ
+- リモコン側のLaunch Browserをタップ
+  - Advertiser #1と出てくるので、そこをタップ
 - 撮影側に、Acceptするかどうかのアラートビューが出てくるので、Accept
 - リモコン側の表示がconnectedになったらDoneを押してLaunch Browserを閉じる
 

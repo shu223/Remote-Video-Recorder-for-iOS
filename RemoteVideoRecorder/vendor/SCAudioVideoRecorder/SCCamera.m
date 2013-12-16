@@ -818,13 +818,13 @@ typedef NSView View;
 // http://pastebin.com/PbR7GV7p
 - (void)setBestFormat {
 
-    AVCaptureDevice *cameraBack =[self videoDeviceWithPosition:(AVCaptureDevicePosition)self.cameraDevice];
+    AVCaptureDevice *device =[self videoDeviceWithPosition:(AVCaptureDevicePosition)self.cameraDevice];
     
     [self.session beginConfiguration];
 
-    if ([cameraBack lockForConfiguration:nil])
-    {
-        NSLog(@"lockForConfiguration...");
+//    if ([cameraBack lockForConfiguration:nil])
+//    {
+//        NSLog(@"lockForConfiguration...");
 //        // No autofocus
 //        if ( [cameraBack isFocusModeSupported:AVCaptureFocusModeLocked])
 //        {
@@ -851,33 +851,88 @@ typedef NSView View;
 //        {
 //            cameraBack.autoFocusRangeRestriction = AVCaptureAutoFocusRangeRestrictionFar;
 //        }
+//        
+//        // Choose best rate depending preset
+//        AVCaptureDeviceFormat *bestFormat = nil;
+//        AVFrameRateRange *bestFrameRateRange = nil;
+//        
+//        NSLog(@"all formats:%@", [cameraBack formats]);
+//        
+//        for ( AVCaptureDeviceFormat *format in [cameraBack formats] )
+//        {
+//            for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges )
+//            {
+//                if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate )
+//                {
+//                    bestFormat = format;
+//                    bestFrameRateRange = range;
+//                }
+//            }
+//        }
+//        if (bestFormat)
+//        {
+//            cameraBack.activeFormat = bestFormat;
+//            cameraBack.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+//            cameraBack.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
+//            NSLog(@"activeFormat:%@", cameraBack.activeFormat);
+//        }
+//        }
+//        
+//        [cameraBack unlockForConfiguration];
+//        NSLog(@"unlockForConfiguration!");
+//    }
+    
+    
+    for (AVCaptureDeviceFormat *format in [device formats]) {
         
-        // Choose best rate depending preset
-        AVCaptureDeviceFormat *bestFormat = nil;
-        AVFrameRateRange *bestFrameRateRange = nil;
+        NSString *compoundString = @"";
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@"'%@'",
+                                                                  format.mediaType]];
+        CMFormatDescriptionRef myCMFormatDescriptionRef= format.formatDescription;
+        FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(myCMFormatDescriptionRef);
         
-        NSLog(@"all formats:%@", [cameraBack formats]);
-        
-        for ( AVCaptureDeviceFormat *format in [cameraBack formats] )
-        {
-            for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges )
-            {
-                if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate )
-                {
-                    bestFormat = format;
-                    bestFrameRateRange = range;
-                }
-            }
+        BOOL fullRange = NO;
+        if (mediaSubType==kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) {
+            
+            compoundString = [compoundString stringByAppendingString:@"/'420v'"];
         }
-        if (bestFormat)
-        {
-            cameraBack.activeFormat = bestFormat;
-            cameraBack.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
-            cameraBack.activeVideoMaxFrameDuration = bestFrameRateRange.maxFrameDuration;
-            NSLog(@"activeFormat:%@", cameraBack.activeFormat);
+        else if (mediaSubType==kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
+            
+            compoundString = [compoundString stringByAppendingString:@"/'420f'"];
+            fullRange = YES;
         }
-        [cameraBack unlockForConfiguration];
-        NSLog(@"unlockForConfiguration!");
+        else {
+            
+            [compoundString stringByAppendingString:@"'UNKNOWN'"];
+        }
+        
+        CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(myCMFormatDescriptionRef);
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@" %ix %i",
+                                                                  dimensions.width, dimensions.height]];
+        
+        float maxFramerate = ((AVFrameRateRange*)[format.videoSupportedFrameRateRanges objectAtIndex:0]).maxFrameRate;
+        
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@", { %.0f- %.0f fps}", ((AVFrameRateRange*)[format.videoSupportedFrameRateRanges objectAtIndex:0]).minFrameRate,
+                                                                  maxFramerate]];
+        
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@", fov: %.3f", format.videoFieldOfView]];
+        compoundString = [compoundString stringByAppendingString:
+                          (format.videoBinned ? @", binned" : @"")];
+        
+        compoundString = [compoundString stringByAppendingString:
+                          (format.videoStabilizationSupported ? @", supports vis" : @"")];
+        
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@", max zoom: %.2f", format.videoMaxZoomFactor]];
+        
+        compoundString = [compoundString stringByAppendingString:[NSString stringWithFormat:@" (upscales @%.2f)", format.videoZoomFactorUpscaleThreshold]];
+        if (fullRange && maxFramerate>59)
+        {
+            NSLog(@"Found 60 fps mode: %@", compoundString);
+            [device lockForConfiguration:nil];
+            device.activeFormat = format;
+            device.activeVideoMaxFrameDuration = CMTimeMake(1,60);
+            [device unlockForConfiguration];
+        }
     }
     [self.session commitConfiguration];
 }
