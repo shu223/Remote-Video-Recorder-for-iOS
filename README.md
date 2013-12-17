@@ -13,7 +13,7 @@
 - 撮影側にRemoteVideoRecorderの方をインストール
 
 
-###2. BLE接続
+###2. BLE Pairing
 
 - リモコン側のLaunch Browserをタップ
   - Advertiser #1と出てくるので、そこをタップ
@@ -21,11 +21,15 @@
 - リモコン側の表示がconnectedになったらDoneを押してLaunch Browserを閉じる
 
 
-###3. リモコン側で操作
+###3. Video Recording
 
-- Start: 撮影開始
-- Retake: 撮影中止（リセット）
-- Stop: 停止と保存
+- 撮影側で所望のFPSをセットしておく
+  - FPSは撮影中切り替え不可
+  - 120fpsはiPhone5sのみ
+- リモコン側で操作
+  - Start: 撮影開始
+  - Retake: 撮影中止（リセット）
+  - Stop: 停止と保存
 
 
 ###Other
@@ -34,9 +38,7 @@
 
 ###ToDo
 
-- 120fps対応・・・そうなるように実装したつもりだけど **そうなってないっぽい**
 - リモコン側で撮影ステータスを把握できるようにする
-  - 撮影開始
-  - 撮影停止
   - プレビュー
+  - FPS
 - 複数台対応
