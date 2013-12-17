@@ -59,17 +59,25 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3uo-g5-sow">
-                                        <rect key="frame" x="0.0" y="52" width="320" height="20"/>
+                                        <rect key="frame" x="0.0" y="60" width="320" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N5o-oB-f1l">
-                                        <rect key="frame" x="251" y="13" width="51" height="31"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xcX-vJ-ZzX">
+                                        <rect key="frame" x="104.5" y="86" width="200" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </switch>
+                                        <segments>
+                                            <segment title="Default"/>
+                                            <segment title="60fps"/>
+                                            <segment title="120fps"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="fpsChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="hJm-Ma-f5Z"/>
+                                        </connections>
+                                    </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -89,7 +97,10 @@
                     </view>
                     <connections>
                         <outlet property="advertiseBtn" destination="Lcs-Ik-yHY" id="L61-MP-Qal"/>
+                        <outlet property="fpsControl" destination="xcX-vJ-ZzX" id="q8j-Xf-gYO"/>
                         <outlet property="previewView" destination="WKU-ec-k75" id="KaX-SS-0Qa"/>
+                        <outlet property="retakeBtn" destination="3pf-Lv-7u9" id="CBQ-sU-oM1"/>
+                        <outlet property="stopBtn" destination="C7M-AM-jhK" id="BIb-eV-pcn"/>
                         <outlet property="timeRecordedLabel" destination="3uo-g5-sow" id="gjl-oh-2Nm"/>
                     </connections>
                 </viewController>
