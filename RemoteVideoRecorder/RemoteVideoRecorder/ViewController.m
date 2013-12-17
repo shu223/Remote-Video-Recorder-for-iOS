@@ -19,6 +19,7 @@
 <AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, MCSessionDelegate>
 {
     BOOL isRecording;
+    BOOL isNeededToSave;
     NSTimeInterval startTime;
     CMTime defaultVideoMaxFrameDuration;
 }
@@ -161,9 +162,9 @@
 
 - (void)startVideoRecording {
     
-    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
-    NSString* dateTimePrefix = [formatter stringFromDate:[NSDate date]];
+    NSString *dateTimePrefix = [formatter stringFromDate:[NSDate date]];
     
     int fileNamePostfix = 0;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -206,6 +207,10 @@
 }
 
 - (void)saveRecordedFile:(NSURL *)recordedFile {
+    
+    if (!isNeededToSave) {
+        return;
+    }
     
     [SVProgressHUD showWithStatus:@"Saving..."
                          maskType:SVProgressHUDMaskTypeGradient];
@@ -262,6 +267,8 @@
    didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
                        fromConnections:(NSArray *)connections error:(NSError *)error
 {
+    NSLog(@"==== STOP RECORDING ====");
+
     [self saveRecordedFile:outputFileURL];
     isRecording = NO;
 }
@@ -375,8 +382,6 @@
     
     if (!isRecording) {
 
-        
-
         NSLog(@"==== STARTING RECORDING ====");
 
         isRecording = YES;
@@ -399,6 +404,7 @@
 
 - (IBAction)stopButtonTapped:(id)sender {
     
+    isNeededToSave = YES;
     [self.fileOutput stopRecording];
     
     [self.timer invalidate];
@@ -411,6 +417,9 @@
 
 - (IBAction)retakeButtonTapped:(id)sender {
     
+    isNeededToSave = NO;
+    [self.fileOutput stopRecording];
+
     [self.timer invalidate];
     self.timer = nil;
 
