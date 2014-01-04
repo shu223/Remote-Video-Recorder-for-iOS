@@ -10,34 +10,36 @@
 
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
-#import <AVFoundation/AVFoundation.h>
+#import "AVCaptureManager.h"
 #import "RVConstants.h"
 #import "SVProgressHUD.h"
 
 
 @interface ViewController ()
-<AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, MCSessionDelegate>
+<AVCaptureManagerDelegate, MCSessionDelegate>
 {
     BOOL isRecording;
     BOOL isNeededToSave;
     NSTimeInterval startTime;
-    CMTime defaultVideoMaxFrameDuration;
 }
-@property (nonatomic, strong) AVCaptureSession *captureSession;
-@property (nonatomic, strong) AVCaptureMovieFileOutput *fileOutput;
-@property (nonatomic, strong) AVCaptureDeviceFormat *defaultFormat;
+@property (nonatomic, strong) AVCaptureManager *captureManager;
 @property (nonatomic, assign) NSTimer *timer;
 
 @property (nonatomic, strong) MCPeerID *peerID;
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCAdvertiserAssistant *advertiserAssistant;
 
+@property (nonatomic, strong) UIImage *recStartImage;
+@property (nonatomic, strong) UIImage *recStopImage;
+@property (nonatomic, strong) UIImage *outerImage1;
+@property (nonatomic, strong) UIImage *outerImage2;
+
 @property (nonatomic, weak) IBOutlet UIView *previewView;
-@property (nonatomic, weak) IBOutlet UILabel *timeRecordedLabel;
+@property (nonatomic, weak) IBOutlet UILabel *statusLabel;
 @property (nonatomic, weak) IBOutlet UIButton *advertiseBtn;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *fpsControl;
-@property (nonatomic, weak) IBOutlet UIButton *retakeBtn;
-@property (nonatomic, weak) IBOutlet UIButton *stopBtn;
+@property (nonatomic, weak) IBOutlet UIButton *recBtn;
+@property (nonatomic, weak) IBOutlet UIImageView *outerImageView;
 @end
 
 
@@ -46,10 +48,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.retakeBtn.hidden = YES;
-    self.stopBtn.hidden = YES;
-    self.fpsControl.hidden = NO;
     
     [self initVideo];
     
@@ -67,124 +65,33 @@
 
 - (void)initVideo {
 
-    NSError *error;
-
-    self.captureSession = [[AVCaptureSession alloc] init];
+    self.captureManager = [[AVCaptureManager alloc] initWithPreviewView:self.previewView];
+    self.captureManager.delegate = self;
     
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    AVCaptureDeviceInput *videoIn = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(handleDoubleTap:)];
+    tapGesture.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:tapGesture];
 
-    if (error) {
-        
-        NSLog(@"Video input creation failed");
-        return;
-    }
-
-    if ([self.captureSession canAddInput:videoIn]) {
-        [self.captureSession addInput:videoIn];
-    }
-    else {
-        NSLog(@"Video input add-to-session failed");
-    }
-
-
-    // save the default format
-    self.defaultFormat = videoDevice.activeFormat;
-    defaultVideoMaxFrameDuration = videoDevice.activeVideoMaxFrameDuration;
+    // Setup images for the Shutter Button
+    UIImage *image;
+    image = [UIImage imageNamed:@"ShutterButtonStart"];
+    self.recStartImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.recBtn setImage:self.recStartImage
+                 forState:UIControlStateNormal];
     
-
-    AVCaptureDevice *audioDevice= [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
-    AVCaptureDeviceInput *audioIn = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
-    [self.captureSession addInput:audioIn];
+    image = [UIImage imageNamed:@"ShutterButtonStop"];
+    self.recStopImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
-    self.fileOutput = [[AVCaptureMovieFileOutput alloc] init];
-    [self.captureSession addOutput:self.fileOutput];
-    
-
-    AVCaptureVideoPreviewLayer * previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.captureSession];
-    previewLayer.frame = self.previewView.bounds;
-    previewLayer.contentsGravity = kCAGravityResizeAspectFill;
-	[self.previewView.layer addSublayer:previewLayer];
-
-    [self.captureSession startRunning];
+    [self.recBtn setTintColor:[UIColor colorWithRed:245./255.
+                                              green:51./255.
+                                               blue:51./255.
+                                              alpha:1.0]];
+    self.outerImage1 = [UIImage imageNamed:@"outer1"];
+    self.outerImage2 = [UIImage imageNamed:@"outer2"];
+    self.outerImageView.image = self.outerImage1;
 }
 
-- (void)setupFormatForVideoDevice:(AVCaptureDevice *)videoDevice
-                       desiredFPS:(CGFloat)desiredFPS
-{
-    // search for a Full Range video + n fps combo
-    for (AVCaptureDeviceFormat *format in videoDevice.formats)
-    {
-        NSString *compoundStr = @"";
-        
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@"'%@'", format.mediaType]];
-        
-        CMFormatDescriptionRef myCMFormatDescriptionRef= format.formatDescription;
-        FourCharCode mediaSubType = CMFormatDescriptionGetMediaSubType(myCMFormatDescriptionRef);
-        BOOL fullRange = NO;
-        if (mediaSubType==kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
-            compoundStr = [compoundStr stringByAppendingString:@"/'420v'"];
-        else if (mediaSubType==kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
-        {
-            compoundStr = [compoundStr stringByAppendingString:@"/'420f'"];
-            fullRange = YES;
-        }
-        else [compoundStr stringByAppendingString:@"'UNKNOWN'"];
-        
-        CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(myCMFormatDescriptionRef);
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@" %ix %i", dimensions.width, dimensions.height]];
-        
-        float maxFramerate = ((AVFrameRateRange*)[format.videoSupportedFrameRateRanges objectAtIndex:0]).maxFrameRate;
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@", { %.0f- %.0f fps}", ((AVFrameRateRange*)[format.videoSupportedFrameRateRanges objectAtIndex:0]).minFrameRate,
-                                                            maxFramerate]];
-        
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@", fov: %.3f", format.videoFieldOfView]];
-        compoundStr = [compoundStr stringByAppendingString:
-                       (format.videoBinned ? @", binned" : @"")];
-        
-        compoundStr = [compoundStr stringByAppendingString:
-                       (format.videoStabilizationSupported ? @", supports vis" : @"")];
-        
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@", max zoom: %.2f", format.videoMaxZoomFactor]];
-        
-        compoundStr = [compoundStr stringByAppendingString:[NSString stringWithFormat:@" (upscales @%.2f)", format.videoZoomFactorUpscaleThreshold]];
-
-        if (fullRange && maxFramerate >= desiredFPS)
-        {
-            NSLog(@"Found %.0f fps mode: %@", desiredFPS, compoundStr);
-            [videoDevice lockForConfiguration:nil];
-            videoDevice.activeFormat = format;
-            videoDevice.activeVideoMaxFrameDuration = CMTimeMake(1, (int32_t)desiredFPS);
-            [videoDevice unlockForConfiguration];
-        }
-    }
-}
-
-- (void)startVideoRecording {
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
-    NSString *dateTimePrefix = [formatter stringFromDate:[NSDate date]];
-    
-    int fileNamePostfix = 0;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *filePath = nil;
-    do
-        filePath =[NSString stringWithFormat:@"/%@/%@-%i.mp4", documentsDirectory, dateTimePrefix, fileNamePostfix++];
-    while ([[NSFileManager defaultManager] fileExistsAtPath:filePath]);
-    
-    NSURL *fileURL = [NSURL URLWithString:[@"file://" stringByAppendingString:filePath]];
-    [self.fileOutput startRecordingToOutputFileURL:fileURL recordingDelegate:self];
-}
-
-- (void)updateLabelForSecond:(Float64)totalRecorded {
-    
-    self.timeRecordedLabel.text = [NSString stringWithFormat:@"Recording: %.2f sec",
-                                   totalRecorded];
-    
-    [self sendMessage:self.timeRecordedLabel.text];
-}
 
 - (void)sendMessage:(NSString *)message {
 
@@ -246,33 +153,38 @@
 //                                                       cancelButtonTitle:@"OK"
 //                                                       otherButtonTitles:nil];
 //                 [alert show];
-                 self.timeRecordedLabel.text = title;
+                 self.statusLabel.text = title;
              });
          }];
     });
 }
 
 
+// =============================================================================
+#pragma mark - Gesture Handler
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)sender {
+    
+    [self.captureManager toggleContentsGravity];
+}
+
 
 // =============================================================================
-#pragma mark - AVCaptureFileOutputRecordingDelegate
+#pragma mark - AVCaptureManagerDeleagte
 
-- (void)                 captureOutput:(AVCaptureFileOutput *)captureOutput
-    didStartRecordingToOutputFileAtURL:(NSURL *)fileURL
-                       fromConnections:(NSArray *)connections
-{
-}
-
-- (void)                 captureOutput:(AVCaptureFileOutput *)captureOutput
-   didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
-                       fromConnections:(NSArray *)connections error:(NSError *)error
-{
-    NSLog(@"==== STOP RECORDING ====");
-
+- (void)didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL error:(NSError *)error {
+    
+    if (error) {
+        NSLog(@"error:%@", error);
+        return;
+    }
+    
+    if (!isNeededToSave) {
+        return;
+    }
+    
     [self saveRecordedFile:outputFileURL];
-    isRecording = NO;
 }
-
 
 
 // =============================================================================
@@ -281,7 +193,9 @@
 - (void)timerHandler:(NSTimer *)timer {
 
     NSTimeInterval current = [[NSDate date] timeIntervalSince1970];
-    [self updateLabelForSecond:current - startTime];
+    NSTimeInterval recorded = current - startTime;
+    
+    self.statusLabel.text = [NSString stringWithFormat:@"%.2f", recorded];
 }
 
 
@@ -333,17 +247,18 @@
             // START
             if ([message isEqualToString:kCommandStart]) {
                 
-                [self startButtonTapped:nil];
-            }
-            // RETAKE
-            else if ([message isEqualToString:kCommandRetake]) {
-                
-                [self retakeButtonTapped:nil];
+                if (!self.captureManager.isRecording) {
+                    
+                    [self recButtonTapped:nil];
+                }
             }
             // STOP
             else if ([message isEqualToString:kCommandStop]) {
                 
-                [self stopButtonTapped:nil];
+                if (self.captureManager.isRecording) {
+                    
+                    [self recButtonTapped:nil];
+                }
             }
         });
     }
@@ -378,52 +293,40 @@
 // =============================================================================
 #pragma mark - IBAction
 
-- (IBAction)startButtonTapped:(id)sender {
+- (IBAction)recButtonTapped:(id)sender {
     
-    if (!isRecording) {
-
-        NSLog(@"==== STARTING RECORDING ====");
-
-        isRecording = YES;
+    // REC START
+    if (!self.captureManager.isRecording) {
         
-        self.stopBtn.hidden = NO;
-        self.retakeBtn.hidden = NO;
-        self.fpsControl.hidden = YES;
+        // change UI
+        [self.recBtn setImage:self.recStopImage
+                     forState:UIControlStateNormal];
+        self.fpsControl.enabled = NO;
         
-        [self startVideoRecording];
+        // timer start
+        startTime = [[NSDate date] timeIntervalSince1970];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01
+                                                      target:self
+                                                    selector:@selector(timerHandler:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
+        [self.captureManager startRecording];
     }
-
-    // 時間経過取得用
-    startTime = [[NSDate date] timeIntervalSince1970];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01
-                                                  target:self
-                                                selector:@selector(timerHandler:)
-                                                userInfo:nil
-                                                 repeats:YES];
-}
-
-- (IBAction)stopButtonTapped:(id)sender {
-    
-    isNeededToSave = YES;
-    [self.fileOutput stopRecording];
-    
-    [self.timer invalidate];
-    self.timer = nil;
-
-    self.stopBtn.hidden = YES;
-    self.retakeBtn.hidden = YES;
-    self.fpsControl.hidden = NO;
-}
-
-- (IBAction)retakeButtonTapped:(id)sender {
-    
-    isNeededToSave = NO;
-    [self.fileOutput stopRecording];
-
-    [self.timer invalidate];
-    self.timer = nil;
-
-    [self updateLabelForSecond:0];
+    // REC STOP
+    else {
+        
+        isNeededToSave = YES;
+        [self.captureManager stopRecording];
+        
+        [self.timer invalidate];
+        self.timer = nil;
+        
+        // change UI
+        [self.recBtn setImage:self.recStartImage
+                     forState:UIControlStateNormal];
+        self.fpsControl.enabled = YES;
+    }
 }
 
 - (IBAction)startAdvertising {
@@ -440,22 +343,15 @@
 }
 
 - (IBAction)fpsChanged:(UISegmentedControl *)sender {
-
-    // Switch the FPS
     
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
-    CGFloat desiredFps;
+    // Switch FPS
+    
+    CGFloat desiredFps = 0.0;;
     switch (self.fpsControl.selectedSegmentIndex) {
         case 0:
         default:
         {
-            [videoDevice lockForConfiguration:nil];
-            videoDevice.activeFormat = self.defaultFormat;
-            videoDevice.activeVideoMaxFrameDuration = defaultVideoMaxFrameDuration;
-            [videoDevice unlockForConfiguration];
-
-            return;
+            break;
         }
         case 1:
             desiredFps = 60.0;
@@ -469,19 +365,25 @@
     [SVProgressHUD showWithStatus:@"Switching..."
                          maskType:SVProgressHUDMaskTypeGradient];
     
-    [self.captureSession stopRunning];
-
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
-
-        [self setupFormatForVideoDevice:videoDevice
-                             desiredFPS:desiredFps];
+        
+        if (desiredFps > 0.0) {
+            [self.captureManager switchFormatWithDesiredFPS:desiredFps];
+        }
+        else {
+            [self.captureManager resetFormat];
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            if (desiredFps > 30.0) {
+                self.outerImageView.image = self.outerImage2;
+            }
+            else {
+                self.outerImageView.image = self.outerImage1;
+            }
             [SVProgressHUD dismiss];
-            
-            [self.captureSession startRunning];
         });
     });
 }

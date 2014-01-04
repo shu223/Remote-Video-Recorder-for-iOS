@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8A697D16185B8244008E0085 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8A697D13185B8244008E0085 /* SVProgressHUD.bundle */; };
 		8A697D17185B8244008E0085 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A697D15185B8244008E0085 /* SVProgressHUD.m */; };
+		8ACDEF321878CA8600BC94F6 /* AVCaptureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ACDEF311878CA8600BC94F6 /* AVCaptureManager.m */; };
 		8AD89196185B2E9300019D88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89195185B2E9300019D88 /* Foundation.framework */; };
 		8AD89198185B2E9300019D88 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89197185B2E9300019D88 /* CoreGraphics.framework */; };
 		8AD8919A185B2E9300019D88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD89199185B2E9300019D88 /* UIKit.framework */; };
@@ -40,6 +41,8 @@
 		8A697D13185B8244008E0085 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		8A697D14185B8244008E0085 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		8A697D15185B8244008E0085 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		8ACDEF301878CA8600BC94F6 /* AVCaptureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCaptureManager.h; sourceTree = "<group>"; };
+		8ACDEF311878CA8600BC94F6 /* AVCaptureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCaptureManager.m; sourceTree = "<group>"; };
 		8AD89192185B2E9200019D88 /* RemoteVideoRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteVideoRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD89195185B2E9300019D88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8AD89197185B2E9300019D88 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -95,6 +98,15 @@
 				8A697D15185B8244008E0085 /* SVProgressHUD.m */,
 			);
 			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		8ACDEF2F1878CA8600BC94F6 /* AVCaptureManager */ = {
+			isa = PBXGroup;
+			children = (
+				8ACDEF301878CA8600BC94F6 /* AVCaptureManager.h */,
+				8ACDEF311878CA8600BC94F6 /* AVCaptureManager.m */,
+			);
+			path = AVCaptureManager;
 			sourceTree = "<group>";
 		};
 		8AD89189185B2E9200019D88 = {
@@ -175,6 +187,7 @@
 		8AD891CA185B39B200019D88 /* vendor */ = {
 			isa = PBXGroup;
 			children = (
+				8ACDEF2F1878CA8600BC94F6 /* AVCaptureManager */,
 				8A697D11185B8244008E0085 /* SVProgressHUD */,
 			);
 			path = vendor;
@@ -291,6 +304,7 @@
 				8AD891A6185B2E9300019D88 /* AppDelegate.m in Sources */,
 				8A697D17185B8244008E0085 /* SVProgressHUD.m in Sources */,
 				8AD891A2185B2E9300019D88 /* main.m in Sources */,
+				8ACDEF321878CA8600BC94F6 /* AVCaptureManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
