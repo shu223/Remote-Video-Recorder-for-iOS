@@ -16,26 +16,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WKU-ec-k75">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKU-ec-k75">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RSt-jP-d0H">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RSt-jP-d0H" userLabel="Timer View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJn-mS-nAh">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJn-mS-nAh">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="320" id="gMP-KW-9lV"/>
+                                            <constraint firstAttribute="height" constant="40" id="vSm-ls-FhF"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="hJn-mS-nAh" secondAttribute="centerY" id="Ybs-hw-D5w"/>
+                                    <constraint firstAttribute="centerX" secondItem="hJn-mS-nAh" secondAttribute="centerX" id="dhh-fL-dTT"/>
+                                    <constraint firstAttribute="height" constant="40" id="dxv-xq-3Hb"/>
+                                    <constraint firstAttribute="width" constant="320" id="rRb-cO-2uQ"/>
+                                </constraints>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SCd-QQ-IpY">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SCd-QQ-IpY">
                                 <rect key="frame" x="0.0" y="449" width="320" height="119"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -69,10 +79,18 @@
                                     </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="119" id="413-nY-oja"/>
+                                    <constraint firstAttribute="width" constant="320" id="Vgy-nN-J3z"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-Ik-yHY">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lcs-Ik-yHY">
                                 <rect key="frame" x="60" y="259" width="200" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Hdh-fJ-Oz8"/>
+                                    <constraint firstAttribute="height" constant="50" id="lov-0H-5UQ"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Start Advertising">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -83,6 +101,20 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="M0H-Vu-sZi" firstAttribute="top" secondItem="SCd-QQ-IpY" secondAttribute="bottom" id="24C-LO-6xQ"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="trailing" secondItem="RSt-jP-d0H" secondAttribute="trailing" id="D2o-BN-JOh"/>
+                            <constraint firstItem="RSt-jP-d0H" firstAttribute="top" secondItem="KIU-eE-k82" secondAttribute="bottom" id="NCK-8J-n4I"/>
+                            <constraint firstItem="WKU-ec-k75" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="UoS-Fp-tGH"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="bottom" secondItem="WKU-ec-k75" secondAttribute="bottom" id="YCL-Kj-dsv"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="trailing" secondItem="WKU-ec-k75" secondAttribute="trailing" id="cLp-Fb-biq"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="centerX" secondItem="Lcs-Ik-yHY" secondAttribute="centerX" id="gew-wY-KWx"/>
+                            <constraint firstItem="WKU-ec-k75" firstAttribute="centerY" secondItem="Lcs-Ik-yHY" secondAttribute="centerY" id="kfP-pa-siS"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="leading" secondItem="WKU-ec-k75" secondAttribute="leading" id="tIu-5Q-r6O"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="leading" secondItem="RSt-jP-d0H" secondAttribute="leading" id="wjl-DA-cWo"/>
+                            <constraint firstItem="WKU-ec-k75" firstAttribute="top" secondItem="RSt-jP-d0H" secondAttribute="top" id="xWM-1g-liY"/>
+                            <constraint firstItem="SCd-QQ-IpY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="xq4-pr-hPh"/>
+                        </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
