@@ -49,6 +49,25 @@
 {
     [super viewDidLoad];
     
+    // Setup images for the Shutter Button
+    UIImage *image;
+    image = [UIImage imageNamed:@"ShutterButtonStart"];
+    self.recStartImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.recBtn setImage:self.recStartImage
+                 forState:UIControlStateNormal];
+    
+    image = [UIImage imageNamed:@"ShutterButtonStop"];
+    self.recStopImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    [self.recBtn setTintColor:[UIColor colorWithRed:245./255.
+                                              green:51./255.
+                                               blue:51./255.
+                                              alpha:1.0]];
+    self.outerImage1 = [UIImage imageNamed:@"outer1"];
+    self.outerImage2 = [UIImage imageNamed:@"outer2"];
+    self.outerImageView.image = self.outerImage1;
+
+    
     [self initVideo];
     
     [self startAdvertising];
@@ -72,24 +91,6 @@
                                                                                  action:@selector(handleDoubleTap:)];
     tapGesture.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:tapGesture];
-
-    // Setup images for the Shutter Button
-    UIImage *image;
-    image = [UIImage imageNamed:@"ShutterButtonStart"];
-    self.recStartImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.recBtn setImage:self.recStartImage
-                 forState:UIControlStateNormal];
-    
-    image = [UIImage imageNamed:@"ShutterButtonStop"];
-    self.recStopImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
-    [self.recBtn setTintColor:[UIColor colorWithRed:245./255.
-                                              green:51./255.
-                                               blue:51./255.
-                                              alpha:1.0]];
-    self.outerImage1 = [UIImage imageNamed:@"outer1"];
-    self.outerImage2 = [UIImage imageNamed:@"outer2"];
-    self.outerImageView.image = self.outerImage1;
 }
 
 
@@ -119,6 +120,8 @@
         return;
     }
     
+    [self sendMessage:kStatusSaving];
+    
     [SVProgressHUD showWithStatus:@"Saving..."
                          maskType:SVProgressHUDMaskTypeGradient];
     
@@ -134,6 +137,8 @@
                  
                  [SVProgressHUD dismiss];
                  
+                 [self sendMessage:kStatusFinished];
+
                  NSString *title;
                  NSString *message;
                  
@@ -196,6 +201,7 @@
     NSTimeInterval recorded = current - startTime;
     
     self.statusLabel.text = [NSString stringWithFormat:@"%.2f", recorded];
+    [self sendMessage:self.statusLabel.text];
 }
 
 
@@ -303,6 +309,8 @@
                      forState:UIControlStateNormal];
         self.fpsControl.enabled = NO;
         
+        [self sendMessage:kStatusRecording];
+        
         // timer start
         startTime = [[NSDate date] timeIntervalSince1970];
         self.timer = [NSTimer scheduledTimerWithTimeInterval:0.01
@@ -315,7 +323,7 @@
     }
     // REC STOP
     else {
-        
+
         isNeededToSave = YES;
         [self.captureManager stopRecording];
         

@@ -12,3 +12,7 @@ static NSString * const kMessageKey         = @"message";
 static NSString * const kCommandStart       = @"start";
 static NSString * const kCommandRetake      = @"retake";
 static NSString * const kCommandStop        = @"stop";
+
+static NSString * const kStatusRecording    = @"recording";
+static NSString * const kStatusSaving       = @"saving";
+static NSString * const kStatusFinished     = @"finished";

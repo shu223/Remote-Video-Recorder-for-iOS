@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A3017" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B3116" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -16,38 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nsN-Ty-3gu">
-                                <rect key="frame" x="20" y="230" width="80" height="80"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="StartButton">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendMessageButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="HaT-yp-iVC"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g59-6K-9sb">
-                                <rect key="frame" x="220" y="230" width="80" height="80"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" image="StopButton">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendMessageButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6Zy-yB-grw"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClH-uw-pSE">
-                                <rect key="frame" x="120" y="230" width="80" height="80"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" image="RetakeButton">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="sendMessageButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Od2-QQ-bl4"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Xo-cX-l9g">
                                 <rect key="frame" x="60" y="162" width="200" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -58,21 +26,75 @@
                                     <action selector="launchBrowserTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="lCu-g8-chM"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRs-VM-cMd">
-                                <rect key="frame" x="0.0" y="318" width="320" height="20"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sJG-2X-VpO">
+                                <rect key="frame" x="0.0" y="449" width="320" height="119"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <subviews>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Yg-G4-WYa">
+                                        <rect key="frame" x="120" y="52" width="80" height="60"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="18"/>
+                                        <state key="normal" image="ShutterButtonStart">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="recButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eCY-mj-jNM"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="outer1" translatesAutoresizingMaskIntoConstraints="NO" id="aAE-Ld-WQ8">
+                                        <rect key="frame" x="127" y="49" width="66" height="66"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4xP-3w-4E1">
+                                        <rect key="frame" x="60" y="12" width="200" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="Default"/>
+                                            <segment title="60fps"/>
+                                            <segment title="120fps"/>
+                                        </segments>
+                                        <color key="tintColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="LhB-Zc-ktW"/>
+                                    <constraint firstAttribute="height" constant="119" id="ViT-Z4-Iaj"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgX-xZ-KdU" userLabel="Message View">
+                                <rect key="frame" x="0.0" y="409" width="320" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2n-ZP-Zqe">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="DINAlternate-Bold" family="DIN Alternate" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="ji9-Fg-OcI"/>
+                                    <constraint firstAttribute="width" constant="320" id="pcd-YB-7iQ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="sJG-2X-VpO" firstAttribute="top" secondItem="EgX-xZ-KdU" secondAttribute="bottom" id="9sr-d4-NMM"/>
+                            <constraint firstAttribute="centerX" secondItem="sJG-2X-VpO" secondAttribute="centerX" id="RIh-RM-HzK"/>
+                            <constraint firstItem="hxa-4G-LKN" firstAttribute="top" secondItem="sJG-2X-VpO" secondAttribute="bottom" id="eeD-XE-zmC"/>
+                            <constraint firstAttribute="centerX" secondItem="EgX-xZ-KdU" secondAttribute="centerX" id="wLV-vK-cQG"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="fpsControl" destination="4xP-3w-4E1" id="oMi-1Q-mFV"/>
                         <outlet property="launchBrowserButton" destination="8Xo-cX-l9g" id="lV7-iw-2HR"/>
-                        <outlet property="messageLabel" destination="QRs-VM-cMd" id="N3Q-fS-6aQ"/>
-                        <outlet property="retakeBtn" destination="ClH-uw-pSE" id="ZG5-e3-w7g"/>
-                        <outlet property="startBtn" destination="nsN-Ty-3gu" id="eRH-5J-VpR"/>
-                        <outlet property="stopBtn" destination="g59-6K-9sb" id="j3s-OW-YEk"/>
+                        <outlet property="messageLabel" destination="D2n-ZP-Zqe" id="ISC-nL-yl0"/>
+                        <outlet property="outerImageView" destination="aAE-Ld-WQ8" id="f3a-Su-42N"/>
+                        <outlet property="recBtn" destination="3Yg-G4-WYa" id="CfX-0N-3Ds"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -80,9 +102,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="RetakeButton" width="128" height="128"/>
-        <image name="StartButton" width="128" height="128"/>
-        <image name="StopButton" width="128" height="128"/>
+        <image name="ShutterButtonStart" width="50" height="50"/>
+        <image name="outer1" width="66" height="66"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

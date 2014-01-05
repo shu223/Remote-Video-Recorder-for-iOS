@@ -9,19 +9,28 @@
 #import "ViewController.h"
 #import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import "RVConstants.h"
+#import "SVProgressHUD.h"
 
 
 @interface ViewController ()
 <MCSessionDelegate, MCBrowserViewControllerDelegate>
+{
+    BOOL isRecording;
+}
 @property (nonatomic, strong) MCPeerID *peerID;
 @property (nonatomic, strong) MCSession *session;
 @property (nonatomic, strong) MCBrowserViewController *browserView;
 
+@property (nonatomic, strong) UIImage *recStartImage;
+@property (nonatomic, strong) UIImage *recStopImage;
+@property (nonatomic, strong) UIImage *outerImage1;
+@property (nonatomic, strong) UIImage *outerImage2;
+
 @property (nonatomic, weak) IBOutlet UIButton *launchBrowserButton;
-@property (nonatomic, weak) IBOutlet UIButton *startBtn;
-@property (nonatomic, weak) IBOutlet UIButton *retakeBtn;
-@property (nonatomic, weak) IBOutlet UIButton *stopBtn;
+@property (nonatomic, weak) IBOutlet UIButton *recBtn;
 @property (nonatomic, weak) IBOutlet UILabel *messageLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *outerImageView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *fpsControl;
 @end
 
 
@@ -31,6 +40,24 @@
 {
     [super viewDidLoad];
     
+    // Setup images for the Shutter Button
+    UIImage *image;
+    image = [UIImage imageNamed:@"ShutterButtonStart"];
+    self.recStartImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.recBtn setImage:self.recStartImage
+                 forState:UIControlStateNormal];
+    
+    image = [UIImage imageNamed:@"ShutterButtonStop"];
+    self.recStopImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    [self.recBtn setTintColor:[UIColor colorWithRed:245./255.
+                                              green:51./255.
+                                               blue:51./255.
+                                              alpha:1.0]];
+    self.outerImage1 = [UIImage imageNamed:@"outer1"];
+    self.outerImage2 = [UIImage imageNamed:@"outer2"];
+    self.outerImageView.image = self.outerImage1;
+
     [self setControlButtonsEnabled:NO];
 }
 
@@ -48,9 +75,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        self.startBtn.enabled = enabled;
-        self.retakeBtn.enabled = enabled;
-        self.stopBtn.enabled = enabled;
+        self.recBtn.enabled = enabled;
         self.launchBrowserButton.hidden = enabled;
     });
 }
@@ -76,7 +101,10 @@
 // =============================================================================
 #pragma mark - MCSessionDelegate
 
-- (void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state {
+- (void)session:(MCSession *)session
+           peer:(MCPeerID *)peerID
+ didChangeState:(MCSessionState)state
+{
     switch (state) {
         case MCSessionStateConnected: {
             NSLog(@"MCSessionStateConnected");
@@ -100,18 +128,50 @@
     }
 }
 
-- (void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID {
+- (void)session:(MCSession *)session
+ didReceiveData:(NSData *)data
+       fromPeer:(MCPeerID *)peerID
+{
     NSPropertyListFormat format;
     NSDictionary *receivedData = [NSPropertyListSerialization propertyListWithData:data
                                                                            options:0
                                                                             format:&format
                                                                              error:NULL];
+    // メッセージの処理
     NSString *message = receivedData[kMessageKey];
 
     if ([message length]) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            self.messageLabel.text = message;
+            // 録画開始
+            if ([message isEqualToString:kStatusRecording]) {
+                
+                isRecording = YES;
+                [self.recBtn setImage:self.recStopImage
+                             forState:UIControlStateNormal];
+            }
+            // 保存開始
+            else if ([message isEqualToString:kStatusSaving]) {
+
+                [SVProgressHUD showWithStatus:@"Saving"
+                                     maskType:SVProgressHUDMaskTypeGradient];
+            }
+            // 録画終了
+            else if ([message isEqualToString:kStatusFinished]) {
+
+                [SVProgressHUD dismiss];
+                
+                self.messageLabel.text = @"Saved!";
+                
+                isRecording = NO;
+                [self.recBtn setImage:self.recStartImage
+                             forState:UIControlStateNormal];
+            }
+            // 録画時間
+            else {
+                self.messageLabel.text = message;
+            }
         });
     }
 }
@@ -142,24 +202,15 @@
 // =============================================================================
 #pragma mark - IBAction
 
-- (IBAction)sendMessageButtonPressed:(UIButton *)sender {
+- (IBAction)recButtonTapped:(UIButton *)sender {
     
     NSString *message;
     
-    switch (sender.tag) {
-        case 0:
-        default:
-            message = @"unknown";
-            break;
-        case 1:
-            message = kCommandStart;
-            break;
-        case 2:
-            message = kCommandRetake;
-            break;
-        case 3:
-            message = kCommandStop;
-            break;
+    if (!isRecording) {
+        message = kCommandStart;
+    }
+    else {
+        message = kCommandStop;
     }
     
     NSDictionary *dataDict = @{ kMessageKey : message };
